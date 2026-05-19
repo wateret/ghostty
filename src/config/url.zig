@@ -25,7 +25,7 @@ const oni = @import("oniguruma");
 /// There are many complicated cases where these heuristics break down, but
 /// handling them well requires a non-regex approach.
 const url_schemes =
-    \\https?://|mailto:|ftp://|file:|ssh:|git://|ssh://|tel:|magnet:|ipfs://|ipns://|gemini://|gopher://|news:
+    \\https?://|mailto:|ftp://|file:|ssh:|git://|ssh://|tel:|magnet:|ipfs://|ipns://|gemini://|gopher://|news:|vscode://
 ;
 
 const ipv6_url_pattern =
@@ -473,6 +473,14 @@ test "url regex" {
         .{
             .input = "./Downloads: Operation not permitted",
             .expect = "./Downloads",
+        },
+        .{
+            .input = "open vscode://file/Users/hanjoung/project/src/main.zig:42 in editor",
+            .expect = "vscode://file/Users/hanjoung/project/src/main.zig:42",
+        },
+        .{
+            .input = "open vscode://vscode-remote/ssh-remote+myhost/home/alice/project/src/main.zig:42 in editor",
+            .expect = "vscode://vscode-remote/ssh-remote+myhost/home/alice/project/src/main.zig:42",
         },
     };
 
