@@ -91,6 +91,9 @@ struct UntrustedURL: Equatable {
         case "file":
             return fileDecision(for: url)
 
+        case "vscode":
+            return .allow(url)
+
         default:
             // A custom scheme can invoke any application registered with
             // Launch Services. The caller must show the target and handler

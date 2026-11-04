@@ -4,7 +4,14 @@ import Testing
 
 @Suite
 struct UntrustedURLTests {
-    @Test(arguments: ["http://example.com", "https://example.com/path", "mailto:user@example.com"])
+    @Test(arguments: [
+        "http://example.com",
+        "https://example.com/path",
+        "mailto:user@example.com",
+        "vscode://file/tmp/example.swift:42",
+        "vscode://vscode-remote/ssh-remote+myhost/home/alice/main.zig:42",
+        "vscode://some.extension/path",
+    ])
     func allowsSafeSchemes(_ value: String) {
         guard case .allow(let url) = UntrustedURL(value).decision else {
             Issue.record("expected an allowed URL")
@@ -23,7 +30,7 @@ struct UntrustedURLTests {
         #expect(UntrustedURL(value).decision == .deny(.malformedURL))
     }
 
-    @Test(arguments: ["vscode://file/tmp/example.swift", "ssh://example.com"])
+    @Test(arguments: ["ssh://example.com"])
     func confirmsCustomSchemes(_ value: String) {
         guard case .confirm(let url) = UntrustedURL(value).decision else {
             Issue.record("expected a confirmation decision")
